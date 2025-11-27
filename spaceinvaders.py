@@ -20,6 +20,10 @@ ship_rect = ship_image.get_rect()
 ship_rect.centerx = SCREEN_WIDTH // 2
 ship_rect.bottom = SCREEN_HEIGHT
 
+def move_ship_right():
+    
+    ship_rect.centerx += 5
+
 # Main game loop
 running = True
 
@@ -28,6 +32,9 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT:
+                move_ship_right()
     
     # Fill the screen
     screen.fill(COLOUR)
