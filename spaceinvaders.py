@@ -20,6 +20,11 @@ ship_rect = ship_image.get_rect()
 ship_rect.centerx = SCREEN_WIDTH // 2
 ship_rect.bottom = SCREEN_HEIGHT
 
+def move_ship_left():
+    # Check if ship would go beyond left boundary
+    if ship_rect.left > 0:
+        ship_rect.centerx -= 5
+
 def move_ship_right():
     # Check if ship would go beyond right boundary
     if ship_rect.right < SCREEN_WIDTH:
@@ -35,8 +40,10 @@ while running:
         if event.type == pygame.QUIT:
             running = False
     
-    # continuos movement
+    # continuous movement
     keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        move_ship_left()
     if keys[pygame.K_RIGHT]:
         move_ship_right()
     
