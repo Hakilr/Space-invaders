@@ -21,20 +21,24 @@ ship_rect.centerx = SCREEN_WIDTH // 2
 ship_rect.bottom = SCREEN_HEIGHT
 
 def move_ship_right():
-    
-    ship_rect.centerx += 5
+    # Check if ship would go beyond right boundary
+    if ship_rect.right < SCREEN_WIDTH:
+        ship_rect.centerx += 5
 
 # Main game loop
 running = True
+clock = pygame.time.Clock()
 
 while running:
-    # Handle events
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RIGHT:
-                move_ship_right()
+    
+    # continuos movement
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_RIGHT]:
+        move_ship_right()
     
     # Fill the screen
     screen.fill(COLOUR)
@@ -43,6 +47,7 @@ while running:
     screen.blit(ship_image, ship_rect)
 
     pygame.display.flip()
+    clock.tick(60)
 
 pygame.quit()
 sys.exit()
