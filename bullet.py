@@ -3,7 +3,7 @@ from pygame.sprite import Sprite
 
 class Bullet(Sprite):
 
-    """Class to manage bullets"""
+    # class to manage bullets
 
     def __init__(self, si_game):
         super().__init__()
@@ -30,3 +30,21 @@ class Bullet(Sprite):
     def draw_bullet(self):
 
         pygame.draw.rect(self.screen, self.color, self.rect)
+
+
+def fire_bullet(bullets, si_game):
+    # Create a new bullet and add it to the bullets group
+    if len(bullets) < 3:  # Limit bullets on screen
+        new_bullet = Bullet(si_game)
+        bullets.add(new_bullet)
+
+
+def update_bullets(bullets):
+        # Update position of bullets and get rid of old bullets
+    bullets.update()
+
+
+def draw_bullets(bullets):
+    # Draw bullets on the screen
+    for bullet in bullets.sprites():
+        bullet.draw_bullet()

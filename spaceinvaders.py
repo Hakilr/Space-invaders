@@ -1,10 +1,10 @@
 import pygame
 import sys
 from ship import Ship
-from bullet import Bullet
+from bullet import Bullet, fire_bullet, update_bullets, draw_bullets
 
 class Settings:
-    """Settings for Space Invaders"""
+    # Settings for Space Invaders
     def __init__(self):
         # Bullet settings
         self.bullet_width = 3
@@ -37,25 +37,9 @@ class Space_Invaders:
         self.running = True
     
     def _check_keydown_events(self, event):
-        """Respond to keypresses."""
+        # spacebar to fire bullets
         if event.key == pygame.K_SPACE:
-            self._fire_bullet()
-    
-    def _fire_bullet(self):
-        """Create a new bullet and add it to the bullets group."""
-        if len(self.bullets) < 3:  # Limit bullets on screen
-            new_bullet = Bullet(self)
-            self.bullets.add(new_bullet)
-    
-    def _update_bullets(self):
-        """Update position of bullets and get rid of old bullets."""
-        # Update bullet positions
-        self.bullets.update()
-    
-    def _draw_bullets(self):
-        """Draw bullets on the screen."""
-        for bullet in self.bullets.sprites():
-            bullet.draw_bullet()
+            fire_bullet(self.bullets, self)
     
     def run(self):
         while self.running:
@@ -74,7 +58,7 @@ class Space_Invaders:
                 self.ship.move_right()
             
             # Update bullets
-            self._update_bullets()
+            update_bullets(self.bullets)
             
             # Fill the screen
             self.screen.fill(self.COLOUR)
@@ -83,7 +67,7 @@ class Space_Invaders:
             self.ship.draw(self.screen)
             
             # Draw bullets
-            self._draw_bullets()
+            draw_bullets(self.bullets)
 
             pygame.display.flip()
             self.clock.tick(60)
