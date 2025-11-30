@@ -2,33 +2,21 @@ import pygame
 import sys
 from ship import Ship
 from bullet import Bullet, fire_bullet, update_bullets, draw_bullets
-
-class Settings:
-    # Settings for Space Invaders
-    def __init__(self):
-        # Bullet settings
-        self.bullet_width = 3
-        self.bullet_height = 15
-        self.bullet_color = (255, 255, 255)
-        self.bullet_speed = 5.0
+from settings import Settings
 
 class Space_Invaders:
     def __init__(self):
         pygame.init()
         
-        # Set up the display
-        self.SCREEN_WIDTH = 800
-        self.SCREEN_HEIGHT = 600
-        self.screen = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
-        pygame.display.set_caption("Space Invaders")
-        
-        self.COLOUR = (0, 0, 0)
-        
         # Initialize settings
         self.settings = Settings()
         
+        # Set up the display
+        self.screen = pygame.display.set_mode((self.settings.SCREEN_WIDTH, self.settings.SCREEN_HEIGHT))
+        pygame.display.set_caption(self.settings.CAPTION)
+        
         # Create ship instance
-        self.ship = Ship("images/ship.bmp", self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
+        self.ship = Ship("images/ship.bmp", self.settings.SCREEN_WIDTH, self.settings.SCREEN_HEIGHT, self.settings)
         
         # Create sprite group for bullets
         self.bullets = pygame.sprite.Group()
@@ -61,7 +49,7 @@ class Space_Invaders:
             update_bullets(self.bullets)
             
             # Fill the screen
-            self.screen.fill(self.COLOUR)
+            self.screen.fill(self.settings.BG_COLOUR)
             
             # Draw the ship
             self.ship.draw(self.screen)
@@ -70,7 +58,7 @@ class Space_Invaders:
             draw_bullets(self.bullets)
 
             pygame.display.flip()
-            self.clock.tick(60)
+            self.clock.tick(self.settings.FPS)
         
         pygame.quit()
         sys.exit()

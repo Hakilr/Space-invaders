@@ -34,7 +34,7 @@ class Bullet(Sprite):
 
 def fire_bullet(bullets, si_game):
     # Create a new bullet and add it to the bullets group
-    if len(bullets) < 3:  # Limit bullets on screen
+    if len(bullets) < si_game.settings.bullets_allowed:  # Limit bullets on screen
         new_bullet = Bullet(si_game)
         bullets.add(new_bullet)
 
