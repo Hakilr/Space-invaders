@@ -3,6 +3,7 @@ import sys
 from ship import Ship
 from bullet import Bullet, fire_bullet, update_bullets, draw_bullets
 from settings import Settings
+from alien import Alien
 
 class Space_Invaders:
     def __init__(self):
@@ -17,6 +18,9 @@ class Space_Invaders:
         
         # Create ship instance
         self.ship = Ship("images/ship.bmp", self.settings.SCREEN_WIDTH, self.settings.SCREEN_HEIGHT, self.settings)
+        
+        # Create a single alien instance
+        self.alien = Alien("images/invader1.bmp", self.settings.SCREEN_WIDTH, 50)
         
         # Create sprite group for bullets
         self.bullets = pygame.sprite.Group()
@@ -53,6 +57,9 @@ class Space_Invaders:
             
             # Draw the ship
             self.ship.draw(self.screen)
+            
+            # Draw the alien
+            self.alien.draw(self.screen)
             
             # Draw bullets
             draw_bullets(self.bullets)
