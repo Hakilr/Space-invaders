@@ -69,11 +69,21 @@ class Space_Invaders:
                         self.bullets.remove(bullet)
                     self.alien = None  # Alien dies
             
+            # Check for alien bullet-ship collisions
+            if self.ship:
+                colliding_alien_bullets = [bullet for bullet in self.alien_bullets if bullet.rect.colliderect(self.ship.rect)]
+                if colliding_alien_bullets:
+                    for bullet in colliding_alien_bullets:
+                        self.alien_bullets.remove(bullet)
+                    self.ship = None  # Ship is destroyed
+                    self.running = False  # End the game
+            
             # Fill the screen
             self.screen.fill(self.settings.BG_COLOUR)
             
             # Draw the ship
-            self.ship.draw(self.screen)
+            if self.ship:
+                self.ship.draw(self.screen)
             
             # Draw the alien
             if self.alien:
