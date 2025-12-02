@@ -1,7 +1,8 @@
 import pygame
 import sys
+import random
 from ship import Ship
-from bullet import Bullet, fire_bullet, update_bullets, draw_bullets
+from bullet import Bullet, fire_bullet, update_bullets, draw_bullets, AlienBullet, fire_alien_bullet
 from settings import Settings
 from alien import Alien
 
@@ -24,6 +25,7 @@ class Space_Invaders:
         
         # Create sprite group for bullets
         self.bullets = pygame.sprite.Group()
+        self.alien_bullets = pygame.sprite.Group()
         
         self.clock = pygame.time.Clock()
         self.running = True
@@ -51,6 +53,13 @@ class Space_Invaders:
             
             # Update bullets
             update_bullets(self.bullets)
+            update_bullets(self.alien_bullets)
+            
+            # Randomly fire alien bullets
+            firing_probability = 1 / 120
+            
+            if self.alien and random.random() < firing_probability:
+                fire_alien_bullet(self.alien_bullets, self.alien, self)
             
             # Check for bullet-alien collisions
             if self.alien:
@@ -72,6 +81,7 @@ class Space_Invaders:
             
             # Draw bullets
             draw_bullets(self.bullets)
+            draw_bullets(self.alien_bullets)
 
             pygame.display.flip()
             self.clock.tick(self.settings.FPS)

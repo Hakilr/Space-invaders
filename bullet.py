@@ -48,3 +48,32 @@ def draw_bullets(bullets):
     # Draw bullets on the screen
     for bullet in bullets.sprites():
         bullet.draw_bullet()
+
+
+class AlienBullet(Sprite):
+    def __init__(self, alien, si_game):
+        super().__init__()
+        self.screen = si_game.screen
+        self.settings = si_game.settings
+        self.color = self.settings.bullet_color
+        
+        self.rect = pygame.Rect(0, 0, self.settings.bullet_width, self.settings.bullet_height)
+        self.rect.midbottom = alien.rect.midbottom
+        
+        self.y = float(self.rect.y)
+    
+    def update(self):
+        self.y += self.settings.bullet_speed
+        self.rect.y = self.y
+        
+        if self.rect.top > self.settings.SCREEN_HEIGHT:
+            self.kill()
+    
+    def draw_bullet(self):
+        pygame.draw.rect(self.screen, self.color, self.rect)
+
+
+def fire_alien_bullet(alien_bullets, alien, si_game):
+    if len(alien_bullets) < si_game.settings.bullets_allowed:
+        new_bullet = AlienBullet(alien, si_game)
+        alien_bullets.add(new_bullet)
