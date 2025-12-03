@@ -20,6 +20,9 @@ class Space_Invaders:
         # Create ship instance
         self.ship = Ship("images/ship.bmp", self.settings.SCREEN_WIDTH, self.settings.SCREEN_HEIGHT, self.settings)
         
+        # Ship lives
+        self.ship_lives = 3
+        
         # Create a single alien instance
         self.alien = Alien("images/invader1.bmp", self.settings.SCREEN_WIDTH, 50)
         
@@ -75,8 +78,15 @@ class Space_Invaders:
                 if colliding_alien_bullets:
                     for bullet in colliding_alien_bullets:
                         self.alien_bullets.remove(bullet)
-                    self.ship = None  # Ship is destroyed
-                    self.running = False  # End the game
+                    # Ship loses a life
+                    self.ship_lives -= 1
+                    if self.ship_lives > 0:
+                        # Respawn the ship
+                        self.ship = Ship("images/ship.bmp", self.settings.SCREEN_WIDTH, self.settings.SCREEN_HEIGHT, self.settings)
+                    else:
+                        # No lives left, game over
+                        self.ship = None
+                        self.running = False
             
             # Fill the screen
             self.screen.fill(self.settings.BG_COLOUR)
