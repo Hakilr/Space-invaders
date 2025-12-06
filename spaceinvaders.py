@@ -21,7 +21,12 @@ class EventHandler:
     
     def _check_keydown_events(self, event):
         if event.key == pygame.K_SPACE:
-            self.si_game.bullet_manager.fire_player_bullet()
+            if self.si_game.game_manager.is_game_over():
+                # Restart game if game is over
+                self.si_game.reset_game()
+            else:
+                # Fire bullet during normal gameplay
+                self.si_game.bullet_manager.fire_player_bullet()
     
     def handle_continuous_movement(self):
         keys = pygame.key.get_pressed()
@@ -46,6 +51,22 @@ class DrawingManager:
         lives_rect = lives_surface.get_rect()
         lives_rect.topleft = (10, 10)
         self.si_game.screen.blit(lives_surface, lives_rect)
+    
+    def draw_game_over(self):
+        self.si_game.screen.fill(self.si_game.settings.BG_COLOUR)
+        
+        center_x = self.si_game.settings.SCREEN_WIDTH // 2
+        center_y = self.si_game.settings.SCREEN_HEIGHT // 2
+        
+        # Game over text
+        text = self.font.render("GAME OVER", True, (255, 0, 0))
+        rect = text.get_rect(center=(center_x, center_y - 30))
+        self.si_game.screen.blit(text, rect)
+        
+        # Restart instruction
+        text = self.font.render("Press SPACE to restart", True, (255, 255, 255))
+        rect = text.get_rect(center=(center_x, center_y + 30))
+        self.si_game.screen.blit(text, rect)
     
     def draw(self):
         # Fill the screen
@@ -96,10 +117,26 @@ class Space_Invaders:
         self.clock = pygame.time.Clock()
         self.running = True
     
+    def reset_game(self):
+        # Reset game state
+        self.ship = Ship("images/ship.bmp", self.settings.SCREEN_WIDTH, self.settings.SCREEN_HEIGHT, self.settings)
+        self.alien = Alien("images/invader1.bmp", self.settings.SCREEN_WIDTH, 50)
+        self.game_manager.ship_lives = 3
+        self.bullet_manager.bullets.empty()
+        self.bullet_manager.alien_bullets.empty()
+    
     def run(self):
         while self.running:
             # Handle events
             self.event_handler.handle_events()
+            
+            # Check if game is over
+            if self.game_manager.is_game_over():
+                # Show game over screen
+                self.renderer.draw_game_over()
+                pygame.display.flip()
+                self.clock.tick(self.settings.FPS)
+                continue
             
             # Handle continuous movement
             self.event_handler.handle_continuous_movement()
@@ -113,10 +150,6 @@ class Space_Invaders:
             # Check collisions
             self.alien = self.game_manager.check_bullet_alien_collisions(self.bullet_manager.bullets, self.alien)
             self.ship = self.game_manager.check_alien_bullet_ship_collisions(self.bullet_manager.alien_bullets, self.ship)
-            
-            # Check if game is over
-            if self.game_manager.is_game_over():
-                self.running = False
             
             # Draw everything
             self.renderer.draw()
