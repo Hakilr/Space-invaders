@@ -8,12 +8,12 @@ class Alien:
         self.image = pygame.image.load(image_path)
         self.rect = self.image.get_rect()
 
-        # Position alien near the top of the screen, centered by default
+        # Position alien near the top of the screen
         self.rect.centerx = screen_width // 2
         self.rect.y = y_pos
 
     def draw(self, screen):
-        """Draw the alien on the screen."""
+        # Draw the alien
         screen.blit(self.image, self.rect)
 
 
