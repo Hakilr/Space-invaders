@@ -36,6 +36,16 @@ class DrawingManager:
     
     def __init__(self, si_game):
         self.si_game = si_game
+        # Initialize font for lives counter
+        self.font = pygame.font.Font(None, 36)
+    
+    def draw_lives_counter(self):
+        # Draw the lives counter in the top-left corner
+        lives_text = f"Lives: {self.si_game.game_manager.ship_lives}"
+        lives_surface = self.font.render(lives_text, True, (255, 255, 255))
+        lives_rect = lives_surface.get_rect()
+        lives_rect.topleft = (10, 10)
+        self.si_game.screen.blit(lives_surface, lives_rect)
     
     def draw(self):
         # Fill the screen
@@ -51,6 +61,9 @@ class DrawingManager:
         
         # Draw bullets
         self.si_game.bullet_manager.draw()
+        
+        # Draw lives counter
+        self.draw_lives_counter()
 
 
 class Space_Invaders:
